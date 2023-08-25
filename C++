@@ -1,7 +1,12 @@
+// Projeto de Controle de Robô com Gamepad
+// Desenvolvido pelo Professor Thiago Antonio Marcão para a Escola Otalipío.
+
+// Inclusão de diretivas para configurações personalizadas e do módulo de gamepad
 #define CUSTOM_SETTINGS
 #define INCLUDE_GAMEPAD_MODULE
 #include <Dabble.h>
 
+// Definição dos pinos utilizados para controle de motores e LEDs
 #define INT1 2
 #define INT2 3
 #define INT3 4
@@ -10,6 +15,7 @@
 #define LED_PIN_12 12
 #define LED_PIN_13 13
 
+// Configurações iniciais
 void setup()
 {
   Serial.begin(250000);
@@ -24,35 +30,36 @@ void setup()
   stopCar(); // Corrigido para chamar a função stopCar() em vez de Stop()
 }
 
+// Loop principal
 void loop()
 {
   Dabble.processInput();
 
-  if (GamePad.isUpPressed())
+  if (GamePad.isUpPressed()) // Se o botão "cima" do gamepad for pressionado
   {
     moveForward();
     digitalWrite(LED_PIN_12, LOW);
     digitalWrite(LED_PIN_13, LOW);
   }
-  else if (GamePad.isDownPressed())
+  else if (GamePad.isDownPressed()) // Se o botão "baixo" do gamepad for pressionado
   {
     moveBackward();
     digitalWrite(LED_PIN_12, LOW);
     digitalWrite(LED_PIN_13, LOW);
   }
-  else if (GamePad.isLeftPressed())
+  else if (GamePad.isLeftPressed()) // Se o botão "esquerda" do gamepad for pressionado
   {
     turnLeft();
     digitalWrite(LED_PIN_12, LOW);
     digitalWrite(LED_PIN_13, LOW);
   }
-  else if (GamePad.isRightPressed())
+  else if (GamePad.isRightPressed()) // Se o botão "direita" do gamepad for pressionado
   {
     turnRight();
     digitalWrite(LED_PIN_12, LOW);
     digitalWrite(LED_PIN_13, LOW);
   }
-  else
+  else // Se nenhum botão do gamepad estiver pressionado
   {
     stopCar();
     digitalWrite(LED_PIN_12, HIGH);
@@ -60,6 +67,7 @@ void loop()
   }
 }
 
+// Função para mover para a frente
 void moveForward()
 {
   digitalWrite(INT1, LOW);
@@ -68,6 +76,7 @@ void moveForward()
   digitalWrite(INT4, LOW);
 }
 
+// Função para mover para trás
 void moveBackward()
 {
   digitalWrite(INT1, HIGH);
@@ -76,6 +85,7 @@ void moveBackward()
   digitalWrite(INT4, HIGH);
 }
 
+// Função para girar à esquerda
 void turnLeft()
 {
   digitalWrite(INT1, HIGH);
@@ -84,6 +94,7 @@ void turnLeft()
   digitalWrite(INT4, LOW);
 }
 
+// Função para girar à direita
 void turnRight()
 {
   digitalWrite(INT1, LOW);
@@ -92,6 +103,7 @@ void turnRight()
   digitalWrite(INT4, HIGH);
 }
 
+// Função para parar o robô
 void stopCar()
 {
   digitalWrite(INT1, LOW);

@@ -20,9 +20,14 @@ Esse projeto oferece uma experiência educacional enriquecedora, pois combina te
 
 Materiais Necessários:
 
-Microcontrolador (por exemplo, Arduino)
-Módulo de Gamepad
-Motores e componentes associados para movimentação
-LEDs para feedback visual
-Componentes eletrônicos adicionais, como fios e resistores, conforme necessário
-Em resumo, o projeto de Controle de Robô com Gamepad, criado pelo Professor Thiago Antonio Marcão, oferece uma experiência educativa inovadora que une diversão e aprendizado prático. Ao controlar um robô através de um gamepad, os alunos exploram conceitos de eletrônica e programação enquanto se envolvem ativamente com a tecnologia. Esse projeto é um testemunho do comprometimento da escola em fornecer oportunidades educacionais excepcionais.
+2 Motores DC 3-6 V para mover o nosso carrinho;
+Chassi e duas rodas (você pode optar também por imprimir seu próprio chassi e até mesmo rodas em 3D!);
+Arduino Uno R3 Compatível;
+Uma Shield Ponte H L298 n;
+Módulo bluetooth Rs232 Hc05;
+Chave Liga-Desliga 10A;
+Suporte 4 Pilhas AA;
+Ferro de solda;
+Estanho;
+Jumpers;
+4 pilhas médias;

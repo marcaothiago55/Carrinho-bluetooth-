@@ -1,25 +1,37 @@
 // Projeto de Controle de Robô com Gamepad
 // Desenvolvido pelo Professor Thiago Antonio Marcão para a Escola Otalipío.
 
-// Inclusão de diretivas para configurações personalizadas e do módulo de gamepad
+// Definições personalizadas para o uso do Dabble
 #define CUSTOM_SETTINGS
+
+// Incluir o módulo GamePad do Dabble
 #define INCLUDE_GAMEPAD_MODULE
 #include <Dabble.h>
 
-// Definição dos pinos utilizados para controle de motores e LEDs
-#define INT1 2
-#define INT2 3
-#define INT3 4
-#define INT4 5
-#define LED_PIN_11 11
-#define LED_PIN_12 12
-#define LED_PIN_13 13
+// Definições dos pinos utilizados
+#define INT1 2         // Pino de controle do motor esquerdo para frente
+#define INT2 3         // Pino de controle do motor direito para frente
+#define INT3 4         // Pino de controle do motor esquerdo para trás
+#define INT4 5         // Pino de controle do motor direito para trás
+#define LED_PIN_11 11  // Pino do LED 11
+#define LED_PIN_12 12  // Pino do LED 12
+#define LED_PIN_13 13  // Pino do LED 13
+#define BUZZER_PIN 9   // Pino do buzzer
 
-// Configurações iniciais
+// Sequência de frequências para o som de motor parado
+int idleSound[] = {50, 100, 150, 200};  // Frequências do som de motor parado
+int idleSoundLength = 4;                 // Número total de frequências na sequência
+int idleSoundIndex = 0;                  // Índice da próxima frequência a ser tocada
+
 void setup()
 {
+  // Inicialização da comunicação serial
   Serial.begin(250000);
+
+  // Inicialização do módulo Dabble
   Dabble.begin(9600, 7, 6);
+
+  // Configuração dos pinos como saída
   pinMode(INT1, OUTPUT);
   pinMode(INT2, OUTPUT);
   pinMode(INT3, OUTPUT);
@@ -27,90 +39,100 @@ void setup()
   pinMode(LED_PIN_11, OUTPUT);
   pinMode(LED_PIN_12, OUTPUT);
   pinMode(LED_PIN_13, OUTPUT);
-  stopCar(); // Corrigido para chamar a função stopCar() em vez de Stop()
+  pinMode(BUZZER_PIN, OUTPUT); // Configuração do pino do buzzer
+
+  // Parar o carro no início
+  stopCar();
 }
 
-// Loop principal
 void loop()
 {
+  // Processar entradas do Dabble
   Dabble.processInput();
 
-  if (GamePad.isUpPressed()) // Se o botão "cima" do gamepad for pressionado
+  // Verificar botões pressionados
+  if (GamePad.isUpPressed())
   {
-    moveForward();
-    digitalWrite(LED_PIN_12, LOW);
-    digitalWrite(LED_PIN_13, LOW);
+    moveForward();           // Mover para frente
+    tone(BUZZER_PIN, 1000);  // Emitir som para a frente
   }
-  else if (GamePad.isDownPressed()) // Se o botão "baixo" do gamepad for pressionado
+  else if (GamePad.isDownPressed())
   {
-    moveBackward();
-    digitalWrite(LED_PIN_12, LOW);
-    digitalWrite(LED_PIN_13, LOW);
+    moveBackward();          // Mover para trás
+    tone(BUZZER_PIN, 500);   // Emitir som para trás
   }
-  else if (GamePad.isLeftPressed()) // Se o botão "esquerda" do gamepad for pressionado
+  else if (GamePad.isLeftPressed())
   {
-    turnLeft();
-    digitalWrite(LED_PIN_12, LOW);
-    digitalWrite(LED_PIN_13, LOW);
+    turnLeft();              // Virar à esquerda
+    tone(BUZZER_PIN, 750);   // Emitir som para a esquerda
   }
-  else if (GamePad.isRightPressed()) // Se o botão "direita" do gamepad for pressionado
+  else if (GamePad.isRightPressed())
   {
-    turnRight();
-    digitalWrite(LED_PIN_12, LOW);
-    digitalWrite(LED_PIN_13, LOW);
+    turnRight();             // Virar à direita
+    tone(BUZZER_PIN, 1250);  // Emitir som para a direita
   }
-  else // Se nenhum botão do gamepad estiver pressionado
+  else
   {
-    stopCar();
-    digitalWrite(LED_PIN_12, HIGH);
-    digitalWrite(LED_PIN_13, HIGH);
+    stopCar();               // Parar o carro
+    playIdleSound();         // Emitir som de motor parado
   }
+  
+  // Manter os LEDs acesos constantemente
+  digitalWrite(LED_PIN_12, HIGH);  // Acender LED_PIN_12 sempre
+  digitalWrite(LED_PIN_13, HIGH);  // Acender LED_PIN_13 sempre
 }
 
-// Função para mover para a frente
+// Função para mover o carro para frente
 void moveForward()
 {
-  digitalWrite(INT1, LOW);
-  digitalWrite(INT2, HIGH);
-  digitalWrite(INT3, HIGH);
-  digitalWrite(INT4, LOW);
+  digitalWrite(INT1, LOW);   // Desligar motor esquerdo para frente
+  digitalWrite(INT2, HIGH);  // Ligar motor direito para frente
+  digitalWrite(INT3, HIGH);  // Ligar motor esquerdo para frente
+  digitalWrite(INT4, LOW);   // Desligar motor direito para frente
 }
 
-// Função para mover para trás
+// Função para mover o carro para trás
 void moveBackward()
 {
-  digitalWrite(INT1, HIGH);
-  digitalWrite(INT2, LOW);
-  digitalWrite(INT3, LOW);
-  digitalWrite(INT4, HIGH);
+  digitalWrite(INT1, HIGH);  // Ligar motor esquerdo para trás
+  digitalWrite(INT2, LOW);   // Desligar motor direito para trás
+  digitalWrite(INT3, LOW);   // Desligar motor esquerdo para trás
+  digitalWrite(INT4, HIGH);  // Ligar motor direito para trás
 }
 
-// Função para girar à esquerda
+// Função para virar o carro à esquerda
 void turnLeft()
 {
-  digitalWrite(INT1, HIGH);
-  digitalWrite(INT2, LOW);
-  digitalWrite(INT3, HIGH);
-  digitalWrite(INT4, LOW);
+  digitalWrite(INT1, HIGH);  // Ligar motor esquerdo para trás
+  digitalWrite(INT2, LOW);   // Desligar motor direito para frente
+  digitalWrite(INT3, HIGH);  // Ligar motor esquerdo para frente
+  digitalWrite(INT4, LOW);   // Desligar motor direito para trás
 }
 
-// Função para girar à direita
+// Função para virar o carro à direita
 void turnRight()
 {
-  digitalWrite(INT1, LOW);
-  digitalWrite(INT2, HIGH);
-  digitalWrite(INT3, LOW);
-  digitalWrite(INT4, HIGH);
+  digitalWrite(INT1, LOW);   // Desligar motor esquerdo para frente
+  digitalWrite(INT2, HIGH);  // Ligar motor direito para trás
+  digitalWrite(INT3, LOW);   // Desligar motor esquerdo para trás
+  digitalWrite(INT4, HIGH);  // Ligar motor direito para frente
 }
 
-// Função para parar o robô
+// Função para parar o carro
 void stopCar()
 {
-  digitalWrite(INT1, LOW);
+  digitalWrite(INT1, LOW);   // Desligar todos os motores
   digitalWrite(INT2, LOW);
   digitalWrite(INT3, LOW);
   digitalWrite(INT4, LOW);
-  digitalWrite(LED_PIN_12, LOW);
-  digitalWrite(LED_PIN_13, LOW);
-  digitalWrite(LED_PIN_11, HIGH);
+  noTone(BUZZER_PIN);        // Parar o som do buzzer
 }
+
+// Função para reproduzir o som de motor parado
+void playIdleSound()
+{
+  tone(BUZZER_PIN, idleSound[idleSoundIndex]);  // Emitir a próxima frequência
+  idleSoundIndex = (idleSoundIndex + 1) % idleSoundLength;  // Atualizar o índice
+  delay(150);  // Tempo entre cada tom do som de motor parado
+}
+

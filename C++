@@ -13,7 +13,6 @@
 #define INT2 3         // Pino de controle do motor direito para frente
 #define INT3 4         // Pino de controle do motor esquerdo para trás
 #define INT4 5         // Pino de controle do motor direito para trás
-#define LED_PIN_11 11  // Pino do LED 11
 #define LED_PIN_12 12  // Pino do LED 12
 #define LED_PIN_13 13  // Pino do LED 13
 #define BUZZER_PIN 9   // Pino do buzzer
@@ -22,6 +21,10 @@
 int idleSound[] = {50, 100, 150, 200};  // Frequências do som de motor parado
 int idleSoundLength = 4;                 // Número total de frequências na sequência
 int idleSoundIndex = 0;                  // Índice da próxima frequência a ser tocada
+
+// Variáveis para o estado dos LEDs
+bool led12State = LOW;
+bool led13State = LOW;
 
 void setup()
 {
@@ -36,7 +39,6 @@ void setup()
   pinMode(INT2, OUTPUT);
   pinMode(INT3, OUTPUT);
   pinMode(INT4, OUTPUT);
-  pinMode(LED_PIN_11, OUTPUT);
   pinMode(LED_PIN_12, OUTPUT);
   pinMode(LED_PIN_13, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT); // Configuração do pino do buzzer
@@ -76,10 +78,30 @@ void loop()
     stopCar();               // Parar o carro
     playIdleSound();         // Emitir som de motor parado
   }
-  
-  // Manter os LEDs acesos constantemente
-  digitalWrite(LED_PIN_12, HIGH);  // Acender LED_PIN_12 sempre
-  digitalWrite(LED_PIN_13, HIGH);  // Acender LED_PIN_13 sempre
+
+  // Acionar o LED no pino 12 com o botão triângulo
+  if (GamePad.isTrianglePressed())
+  {
+    led12State = !led12State;
+    digitalWrite(LED_PIN_12, led12State);
+  }
+
+  // Acionar o LED no pino 13 com o botão quadrado
+  if (GamePad.isSquarePressed())
+  {
+    led13State = !led13State;
+    digitalWrite(LED_PIN_13, led13State);
+  }
+
+  // Ligar o buzzer com o botão circular (círculo)
+  if (GamePad.isCirclePressed())
+  {
+    tone(BUZZER_PIN, 1500); // Substitua a frequência conforme necessário
+  }
+  else
+  {
+    noTone(BUZZER_PIN); // Desligar o buzzer quando o botão circular não está pressionado
+  }
 }
 
 // Função para mover o carro para frente
@@ -135,4 +157,3 @@ void playIdleSound()
   idleSoundIndex = (idleSoundIndex + 1) % idleSoundLength;  // Atualizar o índice
   delay(150);  // Tempo entre cada tom do som de motor parado
 }
-

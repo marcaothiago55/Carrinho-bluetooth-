@@ -1,4 +1,4 @@
-HC-06 só funciona em android e o app versão 1.0.6 baixado pelo Google versões antigas 
+HC-06 só funciona em android e o app Dabble versão 1.0.6 baixado pelo Google versões antigas 
 
 # Descrição Detalhada do Projeto: Controle de Robô com Gamepad
 

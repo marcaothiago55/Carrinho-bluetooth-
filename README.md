@@ -1,3 +1,5 @@
+HC-06 só funciona em android e o app versão 1.0.6 baixado pelo Google versões antigas 
+
 # Descrição Detalhada do Projeto: Controle de Robô com Gamepad
 
 Este projeto exemplar, concebido pelo Professor Thiago Antonio Marcão e desenvolvido para a aula 29 de Robótica Paraná na Escola Otalipío, apresenta uma aplicação empolgante e educativa que combina eletrônica, programação e interatividade. Por meio desse projeto, os alunos têm a oportunidade de se envolver ativamente com a tecnologia enquanto aprendem sobre o funcionamento de sistemas robóticos, comunicação serial, controle de hardware e muito mais.
